@@ -1,0 +1,34 @@
+<html>
+<style>
+table, th, td {
+  border:1px solid black;
+}
+</style>
+<body>
+
+<h2>List of all Topic Specific Questions </h2>
+
+<table style="width: 100%;">
+    
+    <h3>{{ans}}</h3>
+
+    <table>
+        {% if questions %}
+        <tr>
+            <th>Questions Id</th>
+            <th>Questions name</th>
+   
+        </tr>
+    <tr>
+        {% for q in questions %}
+        <td>{{q.id}}</td>
+        <td><a href="{% url 'answers' question_text=q.question_text %}"> {{q.question_text}}</a></td>
+    </tr>
+        {% endfor %}
+   </table>
+{% else %}
+ <h1>No Data</h1>
+{% endif %}
+
+</body>
+</html>

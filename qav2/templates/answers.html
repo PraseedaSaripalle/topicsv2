@@ -1,0 +1,36 @@
+<html>
+<style>
+table, th, td {
+  border:1px solid black;
+}
+</style>
+<body>
+
+<h2>List of all Questions Specific Answers </h2>
+
+<table style="width: 100%;">
+    
+    <h3>{{ans}}</h3>
+
+    <table>
+        {% if answers %}
+        <tr>
+            <th>Answer Id</th>
+            <th>Answer</th>
+            <th>Grade</th>
+   
+        </tr>
+    <tr>
+        {% for a in answers %}
+        <td>{{a.id}}</td>
+        <td>{{a.answer}}</td>
+        <td>{{a.grade}}</td>
+    </tr>
+        {% endfor %}
+   </table>
+{% else %}
+ <h1>No Data</h1>
+{% endif %}
+
+</body>
+</html>

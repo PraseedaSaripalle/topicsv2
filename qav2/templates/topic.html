@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <title>Autocomplete</title>
+</head>
+<body>
+<form>
+    <label for="product">Topic</label>
+    <input type="text" name="topic" id="topic">
+    <button type="button" onclick="submitTopic()">Submit</button>
+</form>
+<h2>List of all Topics and Sub Topics </h2>
+<p id="subtopics"> </p>
+<p id="subtopicquestions"> </p>
+<table style="width: 100%;">
+    <table>
+      {% if topics %}
+      <tr>
+          <th>Topic Id</th>
+          <th>Topic name</th>
+     
+      </tr>
+      <tr>
+          {% for t in topics %}
+          <td>{{t.id}}</td>
+          <td><a href="{% url 'questions' topic_name=t.topic_name %}"> {{t.topic_name}} </a></td>
+      </tr>
+          {% endfor %}
+     </table>
+      {% else %}
+          <h1>No Data</h1>
+      {% endif %} 
+</table>
+ 
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(function () {
+        $("#topic").autocomplete({
+        source:"{% url 'topic' %}" });
+    });
+    
+    function submitTopic() {
+        let topvalue = document.getElementById("topic").value;
+        //document.getElementById("subtopics").innerHTML = topvalue;
+        $.ajax({
+            type: "GET",
+            url: 'tsubques/'+topvalue+'/',
+            subtopic: {
+                "result": topvalue,
+            },
+            dataType: "html",
+            success: function (subtopic) {
+                // any process in data
+                alert("data successfullly retrived from views.py");
+                generatesubmitTopics(subtopic);
+            },
+            failure: function () {
+                alert("failure in retrival");
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: 'questions/'+topvalue+'/',
+            question: {
+                "result": topvalue,
+            },
+            dataType: "html",
+            success: function (question) {
+                // any process in data
+                alert("data successfullly retrived from views.py");
+                getQuestions(question);
+            },
+            failure: function () {
+                alert("failure in retrival");
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: 'retirevetopic/',
+            topic: {
+                "result": topvalue,
+            },
+            dataType: "html",
+            success: function (topic) {
+                // any process in data
+                alert("data successfullly retrived from views.py");
+                //generatesubmitTopics(topic);
+            },
+            failure: function () {
+                alert("failure in retrival");
+            }
+        });
+
+    }
+    function generatesubmitTopics(subtopic) {
+        alert("inside generate subtopics HTML");
+        //document.getElementById("subtopics").innerHTML = subtopic;
+        //let table = document.querySelector("table");
+        //let data = Object.keys(topic);
+        //generateTableHead(table, data);
+    }
+    function generateTableHead(table, data) {
+        let thead = table.createTHead();
+        let row = thead.insertRow();
+        for (let key of data) {
+            let th = document.createElement("th");
+            let text = document.createTextNode(key);
+            th.appendChild(text);
+            row.appendChild(th);
+        }
+        document.getElementById("sublisttable").innerHTML = table;
+    }
+    
+    function getQuestions(question) {
+        alert("inside generate question HTML");
+        document.getElementById("subtopicquestions").innerHTML = question;
+    }
+    
+
+    
+</script>
+  
+
+</body>
+</html>
